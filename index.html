@@ -839,7 +839,7 @@
             else if (!isReviewingFromResults) {
                  recordTimeSpent(currentQuestionIndex);
                  if (currentQuestionIndex === questions.length - 1) {
-                     stopTimer();
+                     // Don't stop the timer when showing review screen
                      showReviewScreen();
                  } else if (currentQuestionIndex < questions.length - 1) {
                      loadQuestion(currentQuestionIndex + 1);
@@ -887,11 +887,12 @@
 
         function showReviewScreen(filterFlagged = false) {
             recordTimeSpent(currentQuestionIndex);
-            stopTimer();
+            // Remove stopTimer() call to keep timer running when going to review screen
             examScreen.classList.add('hidden');
             reviewScreen.classList.remove('hidden');
             reviewScreen.classList.add('flex');
             resultsScreen.classList.add('hidden');
+            resultsScreen.classList.remove('flex');
             setupScreen.classList.add('hidden');
             appContainer.classList.add('flex', 'flex-col');
             reviewGrid.innerHTML = '';
@@ -1039,7 +1040,7 @@
         }
          function handleEndExamFooterClick() {
              recordTimeSpent(currentQuestionIndex);
-             stopTimer();
+             // Don't stop the timer when showing review screen
              showReviewScreen();
          }
 
