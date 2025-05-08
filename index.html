@@ -831,6 +831,11 @@
          }
 
         function showNextQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
             if (isReviewingFromResults) {
                 if (currentQuestionIndex < questions.length - 1) {
                     loadQuestion(currentQuestionIndex + 1, true);
@@ -839,7 +844,6 @@
             else if (!isReviewingFromResults) {
                  recordTimeSpent(currentQuestionIndex);
                  if (currentQuestionIndex === questions.length - 1) {
-                     // Don't stop the timer when showing review screen
                      showReviewScreen();
                  } else if (currentQuestionIndex < questions.length - 1) {
                      loadQuestion(currentQuestionIndex + 1);
@@ -848,6 +852,11 @@
         }
 
         function showPrevQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
              if (isReviewingFromResults) {
                  if (currentQuestionIndex > 0) {
                      loadQuestion(currentQuestionIndex - 1, true);
@@ -915,6 +924,10 @@
                     reviewScreen.classList.add('hidden');
                     reviewScreen.classList.remove('flex');
                     showExamScreen();
+                    // Hide calculator if it's open
+                    if (calculatorUI.classList.contains('visible')) {
+                        toggleCalculator();
+                    }
                     loadQuestion(index);
                 };
                 reviewGrid.appendChild(button);
@@ -935,6 +948,10 @@
                  button.onclick = () => {
                      navigatorModal.classList.remove('flex');
                      navigatorModal.classList.add('hidden');
+                     // Hide calculator if it's open
+                     if (calculatorUI.classList.contains('visible')) {
+                         toggleCalculator();
+                     }
                      const targetIndex = parseInt(button.dataset.questionIndex, 10);
                      loadQuestion(targetIndex, isReviewingFromResults);
                  };
@@ -1031,7 +1048,12 @@
             resultsScreen.classList.add('hidden');
             resultsScreen.classList.remove('flex');
             showExamScreen();
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
             loadQuestion(index, true);
+            backToResultsButton.classList.remove('hidden');
         }
 
         function endExamAndShowResults() {
@@ -1345,7 +1367,16 @@
         endExamButton.addEventListener('click', endExamAndShowResults);
         endExamButtonFooter.addEventListener('click', handleEndExamFooterClick);
         backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
-        navigatorButton.addEventListener('click', () => { recordTimeSpent(currentQuestionIndex); updateNavigatorButtons(); navigatorModal.classList.remove('hidden'); navigatorModal.classList.add('flex'); });
+        navigatorButton.addEventListener('click', () => { 
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator(); 
+            }
+            recordTimeSpent(currentQuestionIndex); 
+            updateNavigatorButtons(); 
+            navigatorModal.classList.remove('hidden'); 
+            navigatorModal.classList.add('flex'); 
+        });
         closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); if (!isReviewingFromResults) questionStartTime = Date.now(); });
         navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
         flagButton.addEventListener('click', toggleFlag);
